@@ -15,6 +15,8 @@ section .bss
 
 section .text
     global _start
+    extern errno_location
+
     extern ft_strlen
     extern ft_putnbr
     extern ft_write
@@ -29,10 +31,8 @@ _start:
     mov rdx, 0                      ; Pas de permissions nécessaires ici
     mov rax, 2                      ; Syscall number pour open (2)
     syscall
-
-    ; Vérifier si l'ouverture du fichier a échoué (si rax < 0)
-    test rax, rax
-    js handle_error_main
+    
+    call verifExecSyscall
 
     mov rdi, rax
     lea rsi, [buffer]
@@ -44,12 +44,12 @@ _start:
 
     mov rdi, buffer
     call ft_write
-
+    call verifExecSyscall
     call printendl
 ; Test ft_write
     mov rdi, msg
     call ft_write
-
+    call verifExecSyscall
     call printendl
 ; Test ft_strlen
     mov rdi, msg
@@ -67,9 +67,11 @@ _start:
 
     mov rdi, src
     call ft_write
+    call verifExecSyscall
     call printendl
     mov rdi, dest
     call ft_write
+    call verifExecSyscall
     call printendl
 ; Test ft_strcmp
     mov rdi, msg
@@ -106,8 +108,13 @@ printendl:
 handle_error_main:
     mov rdi, msgError
     call ft_write
+    call verifExecSyscall
 
-    ; exit main
     mov rax, 60
-    xor rdi, rdi
+    mov rdi, rax
     syscall
+
+verifExecSyscall:
+    test rax, rax
+    js handle_error_main
+    ret
