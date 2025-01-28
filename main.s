@@ -1,6 +1,3 @@
-; nasm -f elf64 -o main.o main.s
-; ld -o a.out main.o libasm.a
-
 section .data
     newline db 10, 0
     msg db "Hello, World!", 10, 0
@@ -15,7 +12,7 @@ section .bss
 
 section .text
     global _start
-    extern errno_location
+    extern __errno
 
     extern ft_strlen
     extern ft_putnbr
@@ -109,6 +106,8 @@ handle_error_main:
     mov rdi, msgError
     call ft_write
     call verifExecSyscall
+
+    call __errno
 
     mov rax, 60
     mov rdi, rax

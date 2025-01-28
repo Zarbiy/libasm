@@ -3,7 +3,7 @@ section .data
     zero db '0'                          ; Caractère pour le chiffre zéro
 
 section .bss
-buffer resb 1      ; Réserver 1 octet pour un tampon
+    buffer resb 1      ; Réserver 1 octet pour un tampon
 
 section .text
 global ft_putnbr

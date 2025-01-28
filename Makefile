@@ -9,7 +9,9 @@ NASM = nasm
 LD = ld
 RM = rm -f
 AR = ar
+GCC = gcc
 AR_FLAGS = rcs
+C_FLAGS = -Wall -Werror -Wextra
 
 NASM_FLAGS = -f elf64
 
@@ -22,9 +24,8 @@ object/%.o: %.s
 $(NAME): $(OBJS)
 	@$(AR) $(AR_FLAGS) $(NAME) $(OBJS)
 
-main: $(NAME) main.s
-	$(NASM) $(NASM_FLAGS) -o main.o main.s
-	$(LD) -o a.out main.o $(NAME)
+main: main.c $(NAME)
+	$(GCC) $(C_FLAGS) -o a.out main.c $(NAME) -lc
 
 clean:
 	@$(RM) -r object
