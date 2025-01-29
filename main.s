@@ -20,6 +20,7 @@ section .text
     extern ft_strcpy
     extern ft_strcmp
     extern ft_read
+    extern ft_strdup
 
 _start:
 ; Test ft_read

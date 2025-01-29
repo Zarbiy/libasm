@@ -2,7 +2,7 @@ section .text
 global ft_strlen
 
 ; Fonction pour calculer la longueur d'une chaîne
-; Entrée : rdi - pointeur vers la chaîne
+; Entree : rdi - pointeur vers la chaîne
 ; Sortie : rax - longueur de la chaîne
 ft_strlen:
     push rcx

@@ -1,10 +1,10 @@
 section .text
     global ft_write
-    extern  errno_location
+    ; extern  __errno_location
 
 ; Entree :
 ;   rdi - descripteur de fichier (par exemple, 1 pour stdout)
-;   rsi - adresse du buffer (chaîne à afficher)
+;   rsi - chaine a afficher
 ;   rdx - longueur de la chaîne à afficher
 
 ft_write:
@@ -19,7 +19,6 @@ ft_write:
 handle_error:
     neg		rax
 	mov		rdi, rax
-	call	__errno_location
-	mov		[rax], rdi
+	; call	__errno_location
 	mov		rax, -1
 	ret

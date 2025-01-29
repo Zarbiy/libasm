@@ -1,37 +1,32 @@
 section .text
-global ft_strcpy
+    global ft_strcpy
 
 ; Fonction pour copier une chaîne
 ; Entrée :
-;   rdi - adresse de la chaîne source
-;   rcx - adresse de la chaîne de destination
-;   rdx - Taille maximale du tampon de destination
+;   rdi - adresse de la chaîne de destination
+;   rsi - adresse de la chaîne source
 ; Sortie :
-;   rcx - adresse de la chaîne de destination (mise à jour)
+;   rax - adresse de la chaîne de destination
+
 ft_strcpy:
-    push rsi
-    mov rsi, rdi
-    mov rbx, rcx
-    xor r8, r8
+    test rdi, rdi       ; Vérifier si destination est NULL
+    jz error            ; Si NULL, retourner erreur
+    test rsi, rsi       ; Vérifier si source est NULL
+    jz error            ; Si NULL, retourner erreur
+
+    mov rax, rdi        ; Sauvegarder adresse destination
 
 copy_loop:
-    cmp r8, rdx
-    je buffer_overflow
+    mov al, [rsi]       ; Charger un octet depuis la source
+    mov [rdi], al       ; Copier dans la destination
+    inc rdi             ; Avancer destination
+    inc rsi             ; Avancer source
+    test al, al         ; Vérifier si on a copié '\0'
+    jnz copy_loop       ; Continuer tant que ce n'est pas la fin
 
-    mov al, byte [rsi]
-    mov byte [rcx], al
-    inc rsi
-    inc rcx
-    inc r8
-    test al, al
-    jnz copy_loop
+    ret                 ; Retourner l'adresse de destination
 
-    pop rsi
-    mov rcx, rbx
+error:
+    xor rax, rax        ; Retourner NULL si erreur
     ret
 
-buffer_overflow:
-    mov byte [rcx + rdx - 1], 0
-    pop rsi
-    mov rcx, rbx
-    ret

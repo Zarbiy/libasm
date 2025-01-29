@@ -2,7 +2,7 @@ MAKEFLAGS += --no-print-directory
 
 NAME = libasm.a
 
-SRCS = ft_strlen.s ft_putnbr.s ft_write.s ft_strcpy.s ft_strcmp.s ft_read.s
+SRCS = ft_strlen.s ft_putnbr.s ft_write.s ft_strcpy.s ft_strcmp.s ft_read.s ft_strdup.s
 OBJS = $(addprefix object/, $(SRCS:.s=.o))
 
 NASM = nasm
@@ -25,7 +25,7 @@ $(NAME): $(OBJS)
 	@$(AR) $(AR_FLAGS) $(NAME) $(OBJS)
 
 main: main.c $(NAME)
-	$(GCC) $(C_FLAGS) -o a.out main.c $(NAME) -lc
+	$(GCC) $(C_FLAGS) -o a.out main.c $(NAME)
 
 clean:
 	@$(RM) -r object
