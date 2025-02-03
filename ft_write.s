@@ -1,6 +1,6 @@
 section .text
     global ft_write
-    ; extern  __errno_location
+    extern  __errno_location
 
 ; Entree :
 ;   rdi - descripteur de fichier (par exemple, 1 pour stdout)
@@ -11,14 +11,15 @@ ft_write:
     mov rax, 1            ; Syscall number pour write (1)
     syscall               ; Appeler le système
 
-    test rax, rax
-    je handle_error
+    cmp rax, 0
+    js handle_error
 
     ret
 
 handle_error:
-    neg		rax
-	mov		rdi, rax
-	; call	__errno_location
-	mov		rax, -1
-	ret
+    neg rax               ; Convertir en positif (errno est positif en C)
+    mov rdi, rax
+    call __errno_location wrt ..plt   ; Obtenir l'adresse de errno
+    mov [rax], rdi        ; Stocker errno
+    mov rax, -1
+    ret

@@ -1,7 +1,6 @@
 #ifndef _LIBASM_H
 #define _LIBASM_H
 
-#include <errno.h>
 #include <unistd.h>
 #include <fcntl.h>
 #include <string.h>

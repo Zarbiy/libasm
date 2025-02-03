@@ -1,8 +1,4 @@
 #include "main.h"
-#include <unistd.h>
-#include <stdio.h>
-#include <string.h>
-#include <fcntl.h>
 
 int main() {
     /* TEST WRITE */
@@ -128,6 +124,21 @@ int main() {
     {
         dprintf(0, "\033[1;32m TEST STRDUP \033[0m\n");
 
+        char *str = "Hello, world!";
+        char *dup = ft_strdup(str);
+
+        if (!dup) {
+            dprintf(0, "Error ft_strdup\n");
+            return 1;
+        }
+
+        dprintf(0, "Original: %s\nDuplicated: %s\n", str, dup);
+        free(dup);
+
+        dup = ft_strdup(NULL);
+        if (!dup) {
+            dprintf(0, "Error ft_strdup\n");
+        }
         dprintf(0, "\n\033[1;31m END-STRDUP------------------------------- \033[0m\n");
     }
     return 0;

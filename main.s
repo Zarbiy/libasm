@@ -12,7 +12,6 @@ section .bss
 
 section .text
     global _start
-    extern __errno
 
     extern ft_strlen
     extern ft_putnbr
@@ -108,7 +107,6 @@ handle_error_main:
     call ft_write
     call verifExecSyscall
 
-    call __errno
 
     mov rax, 60
     mov rdi, rax
