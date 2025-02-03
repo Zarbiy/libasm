@@ -105,9 +105,9 @@ int main() {
         char buffer[50];
         char Rbuffer[50];
 
+        dprintf(0, "\n--------------FD=FILE------------------\n");
         ft_read(fd, buffer, 50);
         dprintf(0, "%s", buffer);
-        dprintf(0, "\n--------------FD=FILE------------------\n");
         read(Rfd, Rbuffer, 50);
         dprintf(0, "REEL: \n%s", Rbuffer);
         dprintf(0, "\n---------------------------------------\n");
@@ -125,20 +125,28 @@ int main() {
         dprintf(0, "\033[1;32m TEST STRDUP \033[0m\n");
 
         char *str = "Hello, world!";
-        char *dup = ft_strdup(str);
+        char *dup;
+
+        dup = ft_strdup(str);
 
         if (!dup) {
             dprintf(0, "Error ft_strdup\n");
             return 1;
         }
 
-        dprintf(0, "Original: %s\nDuplicated: %s\n", str, dup);
+        dprintf(0, "Base: %s\nNew str: %s\n", str, dup);
         free(dup);
+        dprintf(0, "Base: %s\n", str);
 
-        dup = ft_strdup(NULL);
+        dprintf(0, "\n--------------CHAINE-NULL--------------\n");
+        char *strnull = "\0";
+        dup = ft_strdup(strnull);
         if (!dup) {
             dprintf(0, "Error ft_strdup\n");
         }
+        dprintf(0, "Base: %s\nNew str: %s\n", strnull, dup);
+        free(dup);
+
         dprintf(0, "\n\033[1;31m END-STRDUP------------------------------- \033[0m\n");
     }
     return 0;

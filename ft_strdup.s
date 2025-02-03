@@ -5,32 +5,32 @@ section .text
     extern ft_strcpy
     extern __errno_location
 
+; Fonction pour dupliquer une chaîne
+; Entree :
+;   rdi - adresse de la chaîne source
+; Sortie :
+;   rax - adresse de la chaîne de destination
 ft_strdup:
-    ; Sauvegarder l'adresse de la source
-    push    rdi
-    
-    ; Appeler ft_strlen pour obtenir la longueur de la chaîne
     call ft_strlen
-    inc rax               ; Ajouter 1 pour le '\0'
+    inc rax
 
-    ; Allouer de la mémoire avec malloc
-    mov rdi, rax          ; Taille allouée
+    push rdi
+
+    mov rdi, rax            ; Taille allouée pour malloc
     call malloc wrt ..plt
-    cmp rax, 0            ; Vérifier si malloc a échoué
-    jz error              ; Si malloc échoue, gérer l'erreur
+    cmp rax, 0              ; Vérifier si malloc a échoué
+    jz error                ; Gestion d'erreur si malloc échoue
 
-    ; Copier la chaîne source vers la nouvelle destination
-    pop rsi               ; Récupérer l'adresse de la source
-    mov rdi, rax          ; Destination = mémoire allouée
-    call ft_strcpy        ; Copie la chaîne
+    pop rdi                 ; Récupérer l'adresse de la source
+    mov rsi, rdi
+    mov rdi, rax            ; Destination = mémoire allouée par malloc
+    call ft_strcpy          ; Copier la chaîne source vers la destination
 
-    ret
+    ret                     ; Retourner l'adresse de la nouvelle chaîne (dans rax)
 
 error:
-    ; Si malloc échoue, récupérer l'adresse d'errno
+    pop rdi
     call __errno_location wrt ..plt
-
-    ; Définir errno à ENOMEM (12) pour indiquer l'erreur de mémoire
-    mov dword [rax], 12   ; errno = ENOMEM
-    xor rax, rax          ; Retourner NULL
+    mov dword [rax], 12     ; errno = ENOMEM
+    xor rax, rax            ; Retourner NULL
     ret

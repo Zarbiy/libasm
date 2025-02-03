@@ -11,7 +11,7 @@ RM = rm -f
 AR = ar
 GCC = gcc
 AR_FLAGS = rcs
-C_FLAGS = -Wall -Werror -Wextra
+C_FLAGS = -Wall -Werror -Wextra -g3
 
 NASM_FLAGS = -f elf64
 
