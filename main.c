@@ -109,7 +109,7 @@ int main() {
         ft_read(fd, buffer, 50);
         dprintf(0, "%s", buffer);
         read(Rfd, Rbuffer, 50);
-        dprintf(0, "REEL: \n%s", Rbuffer);
+        dprintf(0, "\nREEL: \n%s", Rbuffer);
         dprintf(0, "\n---------------------------------------\n");
         ft_read(fd, buffer, 50);
         dprintf(0, "%s", buffer);
@@ -148,6 +148,15 @@ int main() {
         free(dup);
 
         dprintf(0, "\n\033[1;31m END-STRDUP------------------------------- \033[0m\n");
+    }
+
+    /* TEST ATOI BASE */
+    {
+        dprintf(0, "\033[1;32m TEST ATOI BASE \033[0m\n");
+        if (!ft_atoi_base("", "0123456"))
+            dprintf(0, "Error\n");
+
+        dprintf(0, "\n\033[1;31m END-ATOI-BASE---------------------------- \033[0m\n");
     }
     return 0;
 }

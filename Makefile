@@ -2,7 +2,7 @@ MAKEFLAGS += --no-print-directory
 
 NAME = libasm.a
 
-SRCS = ft_strlen.s ft_putnbr.s ft_write.s ft_strcpy.s ft_strcmp.s ft_read.s ft_strdup.s
+SRCS = ft_strlen.s ft_putnbr.s ft_write.s ft_strcpy.s ft_strcmp.s ft_read.s ft_strdup.s ft_atoi_base.s
 OBJS = $(addprefix object/, $(SRCS:.s=.o))
 
 NASM = nasm
