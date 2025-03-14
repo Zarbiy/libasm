@@ -153,11 +153,54 @@ int main() {
     /* TEST ATOI BASE */
     {
         dprintf(0, "\033[1;32m TEST ATOI BASE \033[0m\n");
-        int nb = ft_atoi_base("1F", "0123456789ABCDEF");
-        if (nb == 0)
-            dprintf(0, "Error\n");
-        else
-            dprintf(0, "nb = %d\n", nb);
+        {
+            dprintf(0, "453 -- 0123456789:\n");
+            int nb = ft_atoi_base("453", "0123456789");
+            if (nb == 0)
+                dprintf(0, "Error\n");
+            else
+                dprintf(0, "nb = %d\n", nb);
+        }
+        {
+            dprintf(0, "1101 -- 01:\n");
+            int nb = ft_atoi_base("1101", "01");
+            if (nb == 0)
+                dprintf(0, "Error\n");
+            else
+                dprintf(0, "nb = %d\n", nb);
+        }
+        {
+            dprintf(0, "FF -- 0123456789ABCDEF:\n");
+            int nb = ft_atoi_base("FF", "0123456789ABCDEF");
+            if (nb == 0)
+                dprintf(0, "Error\n");
+            else
+                dprintf(0, "nb = %d\n", nb);
+        }
+        {
+            dprintf(0, "FF -- 0123456789:\n");
+            int nb = ft_atoi_base("FF", "0123456789");
+            if (nb == 0)
+                dprintf(0, "Error\n");
+            else
+                dprintf(0, "nb = %d\n", nb);
+        }
+        {
+            dprintf(0, "12 -- 90123456789:\n");
+            int nb = ft_atoi_base("12", "90123456789");
+            if (nb == 0)
+                dprintf(0, "Error\n");
+            else
+                dprintf(0, "nb = %d\n", nb);
+        }
+        {
+            dprintf(0, " -- 0123456789:\n");
+            int nb = ft_atoi_base("", "0123456789");
+            if (nb == 0)
+                dprintf(0, "Error\n");
+            else
+                dprintf(0, "nb = %d\n", nb);
+        }
 
         dprintf(0, "\n\033[1;31m END-ATOI-BASE---------------------------- \033[0m\n");
     }

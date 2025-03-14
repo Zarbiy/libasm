@@ -3,49 +3,50 @@ section .text
     extern ft_strlen
 
 ; Entree:
-;   rdi - chaine (str) à convertir (ex: "-1A")
-;   rsi - base (str) (ex: "0123456789ABCDEF")
+;   rdi - chaine (str)
+;   rsi - base (str)
 ; Sortie:
 ;   rax - entier en base 10 (ou -1 en cas d'erreur)
 ft_atoi_base:
     cmp byte [rdi], 0
     je .handle_error
-    push rdi
+
     call check_base
     test rax, rax
     jz .handle_error
-    pop rdi
 
-    push rsi
+    push rdi
     mov rdi, rsi
     call ft_strlen
     mov r8, rax                 ; r8 taille de la base
-    pop rsi
+    pop rdi
 
-    call .pass_whitespace
-    call .check_sign            ; r15 signe (1 ou -1)
+    call pass_whitespace
+    call check_sign
+    call read_number
 
-    ; Conversion du nombre
-    call .read_number
-
-    imul rdx, r15            ; rdx = rdx * signe
-    mov rax, rdx             ; rax = résultat final
+    imul r14, r15            ; rdx = rdx * signe
+    mov rax, r14             ; rax = résultat final
     ret
 
-.pass_whitespace:
+.handle_error:
+    mov rax, 0
+    ret
+
+pass_whitespace:
     cmp byte [rdi], 0x20    ; ' '
     je .next_char
     cmp byte [rdi], 0x09    ; '\t'
     je .next_char
     cmp byte [rdi], 0x0A    ; '\n'
     je .next_char
-    jmp .check_sign
+    ret
 
 .next_char:
     inc rdi
-    jmp .pass_whitespace
+    jmp pass_whitespace
 
-.check_sign:
+check_sign:
     mov r15, 1
     cmp byte [rdi], '-'
     je .minus_sign
@@ -62,23 +63,15 @@ ft_atoi_base:
     inc rdi
     ret
 
-.handle_error:
-    pop rdi                  ; nettoyer la pile (si besoin)
-    mov rax, -1
-    ret
-
 ; r15 : signe (-1 ou 1)
 ; r8 : longueur de la chaine base
-; 
-.read_number:
-    xor rdx, rdx             ; init number
+read_number:
+    xor r14, r14             ; init number
 
 .loop:
-    movzx rcx, byte [rdi]
-    cmp rcx, 0
+    mov dl, byte [rdi]
+    test dl, dl
     je .end_string
-
-    mov dl, cl
 
     push rdi
     mov rdi, rsi
@@ -88,13 +81,19 @@ ft_atoi_base:
     je .handle_error
 
     ; result = result * (base_length) + valeur_digit
-    imul rdx, r8        ; rdx = rdx * longueur_de_la_base
-    add rdx, rax            ; rdx = rdx + index (valeur du digit)
+    imul r14, r8        ; r14 = r14 * longueur_de_la_base
+    add r14, rax            ; r14 = r14 + index (valeur du digit)
 
     inc rdi
     jmp .loop
 
 .end_string:
+    mov rax, r14
+    ret
+
+.handle_error:
+    pop rdi                  ; nettoyer la pile (si besoin)
+    mov rax, 0
     ret
 
 ; find_in_base:
@@ -128,11 +127,12 @@ find_in_base:
 ; Sortie:
 ;   rax = 1 si valide, 0 sinon
 check_base:
-    push rsi
+    push rdi
     mov rdi, rsi
     call ft_strlen
     cmp rax, 2
     jl .invalid_base
+    pop rdi
 
     mov rcx, rax             ; rcx = longueur de la base
     xor rdx, rdx
@@ -163,11 +163,9 @@ check_base:
     cmp rdx, rcx
     jl .base_loop
 
-    pop rsi
     mov rax, 1               ; base valide
     ret
 
 .invalid_base:
-    pop rsi
     xor rax, rax             ; base invalide
     ret
