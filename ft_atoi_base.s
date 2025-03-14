@@ -2,73 +2,172 @@ section .text
     global ft_atoi_base
     extern ft_strlen
 
-; Fonction pour afficher une string de nombre dans une base donne
 ; Entree:
-;   rdi - chaine (str)
-;   rsi - base (str)
+;   rdi - chaine (str) à convertir (ex: "-1A")
+;   rsi - base (str) (ex: "0123456789ABCDEF")
 ; Sortie:
-;   rax - entier
+;   rax - entier en base 10 (ou -1 en cas d'erreur)
 ft_atoi_base:
+    cmp byte [rdi], 0
+    je .handle_error
     push rdi
     call check_base
-    test rax, rax           ; Verifie si rax == 0 (base invalide)
+    test rax, rax
     jz .handle_error
     pop rdi
 
+    push rsi
+    mov rdi, rsi
+    call ft_strlen
+    mov r8, rax                 ; r8 taille de la base
+    pop rsi
+
+    call .pass_whitespace
+    call .check_sign            ; r15 signe (1 ou -1)
+
+    ; Conversion du nombre
+    call .read_number
+
+    imul rdx, r15            ; rdx = rdx * signe
+    mov rax, rdx             ; rax = résultat final
+    ret
+
+.pass_whitespace:
+    cmp byte [rdi], 0x20    ; ' '
+    je .next_char
+    cmp byte [rdi], 0x09    ; '\t'
+    je .next_char
+    cmp byte [rdi], 0x0A    ; '\n'
+    je .next_char
+    jmp .check_sign
+
+.next_char:
+    inc rdi
+    jmp .pass_whitespace
+
+.check_sign:
+    mov r15, 1
+    cmp byte [rdi], '-'
+    je .minus_sign
+    cmp byte [rdi], '+'
+    je .plus_sign
+    ret
+
+.minus_sign:
+    inc rdi
+    mov r15, -1
+    ret
+
+.plus_sign:
+    inc rdi
     ret
 
 .handle_error:
-    pop rdi
-    xor rax, rax
+    pop rdi                  ; nettoyer la pile (si besoin)
+    mov rax, -1
     ret
 
-; Verifie si la base est valide
-; Entree : rsi (base)
-; Sortie : rax = 1 si valide, 0 sinon
-check_base:
-    push rsi                ; Sauvegarde base
-    mov rdi, rsi            ; Met la base en parametre pour ft_strlen
-    call ft_strlen          ; rax = taille base
+; r15 : signe (-1 ou 1)
+; r8 : longueur de la chaine base
+; 
+.read_number:
+    xor rdx, rdx             ; init number
 
-    cmp rax, 2              ; Verifie si la base a au moins 2 caracteres
+.loop:
+    movzx rcx, byte [rdi]
+    cmp rcx, 0
+    je .end_string
+
+    mov dl, cl
+
+    push rdi
+    mov rdi, rsi
+    call find_in_base
+    pop rdi
+    cmp rax, -1
+    je .handle_error
+
+    ; result = result * (base_length) + valeur_digit
+    imul rdx, r8        ; rdx = rdx * longueur_de_la_base
+    add rdx, rax            ; rdx = rdx + index (valeur du digit)
+
+    inc rdi
+    jmp .loop
+
+.end_string:
+    ret
+
+; find_in_base:
+; Recherche le caractere dans la base
+; Sortie:
+;   rax = position du caractere dans la base, -1 si non trouvé
+find_in_base:
+    xor rax, rax
+
+.find_loop:
+    cmp byte [rdi], 0
+    je .not_found
+    cmp byte [rdi], dl       ; comparer avec le caractere à chercher
+    je .found
+    inc rdi
+    inc rax
+    jmp .find_loop
+
+.found:
+    ret
+
+.not_found:
+    mov rax, -1
+    ret
+
+
+; Conditions:
+;   - longueur >= 2
+;   - ne contient pas '+' ni '-' ni espaces
+;   - tous les caracteres sont uniques
+; Sortie:
+;   rax = 1 si valide, 0 sinon
+check_base:
+    push rsi
+    mov rdi, rsi
+    call ft_strlen
+    cmp rax, 2
     jl .invalid_base
 
-    mov rcx, rax            ; rcx = taille base
-    xor rdx, rdx            ; init compteur
+    mov rcx, rax             ; rcx = longueur de la base
+    xor rdx, rdx
 
 .base_loop:
     mov al, [rsi + rdx]
-    
     cmp al, '+'
     je .invalid_base
     cmp al, '-'
     je .invalid_base
-
-    mov rbx, rdx            ; rbx = i (index actuel)
-    inc rbx                 ; Commencer à i + 1
-
-.check_duplicate:
-    cmp rbx, rcx            ; Si on depasse la longueur, passer au prochain caractere
-    jge .next_char
-
-    mov ah, [rsi + rbx]     ; Charger base[j]
-    cmp al, ah              ; Si base[i] == base[j], erreur
+    cmp al, ' '
     je .invalid_base
 
+    mov rbx, rdx             ; rbx = i
+    inc rbx                  ; commencer a i+1
+
+.check_duplicate:
+    cmp rbx, rcx
+    jge .next_char
+    mov ah, [rsi + rbx]
+    cmp al, ah
+    je .invalid_base
     inc rbx
     jmp .check_duplicate
 
 .next_char:
-    inc rdx                 ; Passer au caractere suivant de la base
-    cmp rdx, rcx            ; Si on a parcouru toute la base, c'est bon
+    inc rdx
+    cmp rdx, rcx
     jl .base_loop
 
-    pop rsi                 ; Restaure base
-    mov rax, 1              ; Base valide
+    pop rsi
+    mov rax, 1               ; base valide
     ret
 
 .invalid_base:
     pop rsi
-    xor rax, rax
+    xor rax, rax             ; base invalide
     ret
-

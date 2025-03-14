@@ -153,8 +153,11 @@ int main() {
     /* TEST ATOI BASE */
     {
         dprintf(0, "\033[1;32m TEST ATOI BASE \033[0m\n");
-        if (!ft_atoi_base("", "0123456"))
+        int nb = ft_atoi_base("1F", "0123456789ABCDEF");
+        if (nb == 0)
             dprintf(0, "Error\n");
+        else
+            dprintf(0, "nb = %d\n", nb);
 
         dprintf(0, "\n\033[1;31m END-ATOI-BASE---------------------------- \033[0m\n");
     }
