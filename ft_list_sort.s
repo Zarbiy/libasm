@@ -11,15 +11,15 @@ ft_list_sort:
     test rsi, rsi
     jz .end
 
-    mov r10, rsi         ; save function
-    mov r12, rdi
+    mov r10, rsi            ; save function
+    mov r12, rdi            ; save list
 
 .init:
-    xor r11, r11         ; init flag swap
+    xor r11, r11            ; init flag swap
     mov rbx, r12
 
 .loop:
-    mov rcx, [rbx+8]
+    mov rcx, [rbx+8]        ; next node
 
     test rcx, rcx
     jz .check_swap
@@ -28,7 +28,7 @@ ft_list_sort:
     mov rsi, [rcx]
     call r10
     cmp rax, 0
-    jle .no_swap         ; if rdi <= rsi no change
+    jle .no_swap            ; if rdi <= rsi no change
 
     mov r8, [rbx]
     mov r9, [rcx]
@@ -40,7 +40,7 @@ ft_list_sort:
     mov rbx, rcx
     jmp .loop
 
-.check_swap:              ; if swap restart
+.check_swap:                ; if swap restart
     test r11, r11
     jnz .init
 

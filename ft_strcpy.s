@@ -9,24 +9,24 @@ section .text
 ;   rax - adresse de la chaîne de destination
 
 ft_strcpy:
-    test rdi, rdi       ; Vérifier si destination est NULL
-    jz error            ; Si NULL, retourner erreur
-    test rsi, rsi       ; Vérifier si source est NULL
-    jz error            ; Si NULL, retourner erreur
+    test rdi, rdi
+    jz error
+    test rsi, rsi
+    jz error
 
-    mov rax, rdi        ; Sauvegarder adresse destination
+    mov rax, rdi
 
 copy_loop:
-    mov dl, [rsi]       ; Charger un octet depuis la source
-    mov [rdi], dl       ; Copier dans la destination
-    inc rdi             ; Avancer destination
-    inc rsi             ; Avancer source
-    test dl, dl         ; Vérifier si on a copié '\0'
-    jnz copy_loop       ; Continuer tant que ce n'est pas la fin
+    mov dl, [rsi]
+    mov [rdi], dl
+    inc rdi
+    inc rsi
+    test dl, dl
+    jnz copy_loop
 
-    ret                 ; Retourner l'adresse de destination
+    ret
 
 error:
-    xor rax, rax        ; Retourner NULL si erreur
+    xor rax, rax
     ret
 

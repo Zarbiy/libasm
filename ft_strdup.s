@@ -16,17 +16,17 @@ ft_strdup:
 
     push rdi
 
-    mov rdi, rax            ; Taille allouée pour malloc
+    mov rdi, rax
     call malloc wrt ..plt
-    cmp rax, 0              ; Vérifier si malloc a échoué
-    jz error                ; Gestion d'erreur si malloc échoue
+    cmp rax, 0
+    jz error
 
-    pop rdi                 ; Récupérer l'adresse de la source
+    pop rdi
     mov rsi, rdi
-    mov rdi, rax            ; Destination = mémoire allouée par malloc
-    call ft_strcpy          ; Copier la chaîne source vers la destination
+    mov rdi, rax
+    call ft_strcpy
 
-    ret                     ; Retourner l'adresse de la nouvelle chaîne (dans rax)
+    ret
 
 error:
     pop rdi
