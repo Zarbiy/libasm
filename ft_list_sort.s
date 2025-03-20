@@ -1,8 +1,8 @@
-section .text:
+section .text
     global ft_list_sort
 
 ; Entree:
-;   rdi - list
+;   rdi - **list
 ;   rsi - function (strcmp)
 ft_list_sort:
     test rdi, rdi
@@ -26,12 +26,18 @@ ft_list_sort:
 
     mov rdi, [rbx]
     mov rsi, [rcx]
+
+    test rdi, rdi
+    jz .no_swap
+    test rsi, rsi
+    jz .no_swap
+    
     call r10
     cmp rax, 0
     jle .no_swap            ; if rdi <= rsi no change
 
-    mov r8, [rbx]
-    mov r9, [rcx]
+    mov r8, rdi
+    mov r9, rsi
     mov [rbx], r9
     mov [rcx], r8
     mov r11, 1
