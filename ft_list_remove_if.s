@@ -5,3 +5,4 @@ section .text:
 ;   rdi -
 ;   rsi -
 ft_list_remove_if:
+    ret

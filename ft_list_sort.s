@@ -12,7 +12,7 @@ ft_list_sort:
     jz .end
 
     mov r10, rsi            ; save function
-    mov r12, rdi            ; save list
+    mov r12, [rdi]          ; save list
 
 .init:
     xor r11, r11            ; init flag swap
