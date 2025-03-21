@@ -158,6 +158,8 @@ int main(){
 
         t_list *list = NULL;
 
+        ft_list_remove_if(&list, "Bob", &strcmp, &free);
+
         char *data1 = "Hello";
         char *data2 = "I am";
         char *data3 = "Bob";
@@ -166,8 +168,18 @@ int main(){
         ft_list_push_front(&list, data2);
         ft_list_push_front(&list, data3);
 
+        dprintf(0, "Before:\n");
+        printf_list(list);
+        ft_list_remove_if(&list, "Bobq", &strcmp, &free);
+        dprintf(0, "After:\n");
         printf_list(list);
         ft_list_remove_if(&list, "Bob", &strcmp, &free);
+        dprintf(0, "After:\n");
+        printf_list(list);
+        ft_list_remove_if(&list, "Hello", &strcmp, &free);
+        dprintf(0, "After:\n");
+        printf_list(list);
+
 
         free_list(&list);
         dprintf(0, "\n\033[1;31m END-LIST-REMOVE-IF----------------------- \033[0m\n");
