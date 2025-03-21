@@ -136,9 +136,9 @@ int main(){
 
         ft_list_push_front(&list, data3);
         ft_list_push_front(&list, data2);
+        ft_list_push_front(&list, data6);
         ft_list_push_front(&list, data1);
         ft_list_push_front(&list, data5);
-        ft_list_push_front(&list, data6);
         ft_list_push_front(&list, data4);
 
         dprintf(0, "Before:\n");
@@ -150,7 +150,6 @@ int main(){
         printf_list(list);
 
         free_list(&list);
-
         dprintf(0, "\n\033[1;31m END-LIST-SORT---------------------------- \033[0m\n");
     }
     /* TEST LIST REMOVE IF C12 */
@@ -168,7 +167,9 @@ int main(){
         ft_list_push_front(&list, data3);
 
         printf_list(list);
+        ft_list_remove_if(&list, "Bob", &strcmp, &free);
 
+        free_list(&list);
         dprintf(0, "\n\033[1;31m END-LIST-REMOVE-IF----------------------- \033[0m\n");
     }
     return (0);
