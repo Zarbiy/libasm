@@ -26,20 +26,15 @@ ft_list_sort:
 
     mov rdi, [rbx]
     mov rsi, [rcx]
-
-    test rdi, rdi
-    jz .no_swap
-    test rsi, rsi
-    jz .no_swap
-    
+    push rcx
     call r10
+    pop rcx
+    cdqe                    ; permet de passer le retour de strcmp de 32bits a 64bits
     cmp rax, 0
     jle .no_swap            ; if rdi <= rsi no change
 
-    mov r8, rdi
-    mov r9, rsi
-    mov [rbx], r9
-    mov [rcx], r8
+    mov [rbx], rsi
+    mov [rcx], rdi
     mov r11, 1
 
 .no_swap:
